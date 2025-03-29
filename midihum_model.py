@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import List, Optional, Tuple
 
-import click
 import mido
 import numpy as np
 import pandas as pd
@@ -10,7 +9,6 @@ import xgboost as xgb
 import sklearn
 
 from midi_to_df_conversion import midi_files_to_df
-from prepare_midi import load_data
 
 
 class MidihumModel:
@@ -22,9 +20,6 @@ class MidihumModel:
 
     def __init__(self):
         if self.model_path.exists() and self.scaler_path.exists():
-            click.echo(
-                f"midihum_model loading model from {self.model_path} and {self.scaler_path}"
-            )
             self.model = xgb.XGBRegressor(
                 booster="gbtree",
                 max_depth=7,
@@ -43,9 +38,6 @@ class MidihumModel:
             with open(self.scaler_path, "rb") as f:
                 self.scaler = pickle.load(f)
         else:
-            click.echo(
-                f"midihum_model could not find model in {self.model_path} and {self.scaler_path}"
-            )
             raise Exception()
 
     @staticmethod
@@ -102,15 +94,12 @@ class MidihumModel:
         )
         df["prediction"] = self._rescale_predictions(self.scaler, df["prediction"])
         df[out_names] = out_cols
-        click.echo(
-            f"midihum_tabular inferred {len(df)} velocities with mean {np.mean(df.prediction)} and std {np.std(df.prediction)}"
-        )
+
         return df
 
     def humanize(
         self, source_path: Path, destination_path: Path, rescale: bool = True
     ) -> List[float]:
-        click.echo(f"midihum_tabular humanizing {source_path}")
         df = midi_files_to_df(
             midi_filepaths=[source_path], skip_suspicious=False
         ).copy()
@@ -126,7 +115,6 @@ class MidihumModel:
                 row.midi_event_index
             ].velocity = velocity
 
-        click.echo(f"midihum_tabular saving humanized file to {destination_path}")
         midi_file.save(destination_path)
 
         return velocities

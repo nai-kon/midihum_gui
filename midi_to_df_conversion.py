@@ -2,12 +2,10 @@ import os
 from pathlib import Path
 from typing import List, Dict
 
-import click
 import numpy as np
 import pandas as pd
 from mido import MidiFile
 from sklearn import preprocessing
-from tqdm import tqdm
 
 from midi_utility import get_note_tracks, get_midi_file_hash
 from chord_identifier import chord_attributes
@@ -19,17 +17,11 @@ def midi_files_to_df(
 ) -> pd.DataFrame:
     dfs = []
     hashes_to_filenames: Dict[str, str] = {}
-    pbar = tqdm(midi_filepaths)
-    for midi_filepath in pbar:
-        pbar.set_description(f"midi_to_df_conversion converting {midi_filepath} to df")
+    for midi_filepath in midi_filepaths:
         midi_file = MidiFile(midi_filepath)
 
         midi_file_hash = get_midi_file_hash(midi_file)
         if midi_file_hash in hashes_to_filenames:
-            tqdm.write(
-                f"midi_to_df_conversion skipping {midi_filepath} since an identical file exists "
-                f"({hashes_to_filenames[midi_file_hash]})"
-            )
             continue
         hashes_to_filenames[midi_file_hash] = midi_filepath
 
@@ -37,9 +29,6 @@ def midi_files_to_df(
             df = _midi_file_to_df(midi_file)
 
             if skip_suspicious and len(df.velocity.unique()) < 25:
-                tqdm.write(
-                    f"midi_to_df_conversion skipping {midi_filepath} since it had few unique velocity values"
-                )
                 continue
 
             df["name"] = os.path.split(midi_file.filename)[-1]
@@ -58,16 +47,10 @@ def midi_files_to_df(
             dfs.append(df)
         # TODO: catch more specific exception
         except Exception as e:
-            tqdm.write(
-                f"midi_to_df_conversion got exception converting midi to df: {e}"
-            )
             raise e
 
     processed_count = len(dfs)
     total_count = len(midi_filepaths)
-    click.echo(
-        f"midi_to_df_conversion converted {processed_count} files out of {total_count} to dfs"
-    )
 
     return pd.concat(dfs)
 
@@ -174,9 +157,6 @@ def _midi_file_to_df(midi_file) -> pd.DataFrame:
                 if len(result) > 0:
                     sustain_duration = result[-1][16]
                 else:
-                    tqdm.write(
-                        f"midi_to_df_conversion warning: got first note with 0 duration; defaulting to 25"
-                    )
                     sustain_duration = 25.0
 
             # get the average pitch of all notes currently being played
@@ -192,12 +172,6 @@ def _midi_file_to_df(midi_file) -> pd.DataFrame:
             # add new row to result and sort all rows by note time (2nd column)
             result.append(note_on_data + note_off_data)
             result.sort(key=lambda row: row[1])
-
-    skipped_events = len(note_events) - len(result)
-    if skipped_events > 0:
-        tqdm.write(
-            f"midi_to_df_conversion warning: saw {skipped_events} note off events for pitches that hadn't been played"
-        )
 
     df = pd.DataFrame(result)
     df.columns = [
