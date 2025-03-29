@@ -4,26 +4,24 @@
 forked from:
 https://github.com/erwald/midihum
 
-I added a simple GUI and compile it to exe by pyinstaller
+I added a simple GUI and compile to exe.
 
 ![](dialog.png)
 
 ## Requirements
 
-* Python 3.11.6
+* Python 3.11
 * uv 0.6.2
 
 ## Installation
 `uv sync`
 
-## Build
+## Build (Windows only)
 `.\build_win.bat`
 
 OR
 
-Run release workflow of GitHub Actions.
-
-Currently only Windows.
+Run Release workflow of GitHub Actions.
 
 ## Usage
 
