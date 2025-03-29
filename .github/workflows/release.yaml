@@ -1,16 +1,14 @@
-name: release
+name: Release
 
 on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   release:
     runs-on: windows-latest
-    permissions: 
-      contents: write
 
     steps:
     - name: Checkout
@@ -25,7 +23,7 @@ jobs:
     - name: Build binary
       uses: .\build_win.bat
 
-    - name: create release
+    - name: Create release
       uses: softprops/action-gh-release@v1
       with:
         draft: true
