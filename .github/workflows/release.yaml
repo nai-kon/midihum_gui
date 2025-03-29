@@ -21,7 +21,7 @@ jobs:
       run: uv sync
 
     - name: Build binary
-      uses: .\build_win.bat
+      run: .\build_win.bat
 
     - name: Create release
       uses: softprops/action-gh-release@v1
