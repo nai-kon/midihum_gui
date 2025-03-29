@@ -27,6 +27,7 @@ if __name__ == "__main__":
             pbar.set(100 * i / len(paths))
             
         pbtn["state"] = tk.NORMAL
+        pbtn2["state"] = tk.NORMAL
         subprocess.Popen(["explorer", os.path.abspath(output_dir)], shell=True)
         label["text"] = label["text"].replace("processing", "finished")
 
@@ -50,6 +51,7 @@ if __name__ == "__main__":
         pbar.set(0)
         global pbtn
         pbtn["state"] = tk.DISABLED
+        pbtn2["state"] = tk.DISABLED
         global th
         th = threading.Thread(target=worker, args=(paths, output_dir))
         th.start()
