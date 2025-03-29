@@ -12,10 +12,6 @@ if __name__ == "__main__":
     model = MidihumModel()
 
     def worker(paths, output_dir):
-        global pbar
-        global pbtn
-        global label
-
         pbar.set(0)
 
         for i, path in enumerate(paths, start=1):
@@ -32,7 +28,6 @@ if __name__ == "__main__":
         label["text"] = label["text"].replace("processing", "finished")
 
     def dirsel():
-        global label_output_dir
         output_dir = filedialog.askdirectory(mustexist=True)
         if output_dir != "":
             label_output_dir["text"] = DISP_IDENT_OUTDIR + output_dir
@@ -46,15 +41,11 @@ if __name__ == "__main__":
         paths = filedialog.askopenfilenames(filetypes=[("mid", "*.mid")])
         if len(paths) == 0:
             return
-        print(paths)
-        global pbar
+
         pbar.set(0)
-        global pbtn
         pbtn["state"] = tk.DISABLED
         pbtn2["state"] = tk.DISABLED
-        global th
-        th = threading.Thread(target=worker, args=(paths, output_dir))
-        th.start()
+        threading.Thread(target=worker, args=(paths, output_dir)).start()
 
     baseGround = tk.Tk()
     baseGround.title("midihum with GUI")
