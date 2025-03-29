@@ -28,8 +28,11 @@ jobs:
     - name: Build binary
       run: .\build_win.bat
 
+    - name: Collect release files
+      run: Compress-Archive -Path "dist/midihum_gui/*" -DestinationPath "midihum_gui.zip"
+
     - name: Create release
       uses: softprops/action-gh-release@v1
       with:
         draft: true
-        files: ./dist/midihum_gui/*
+        files: "midihum_gui.zip"
