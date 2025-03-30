@@ -4,7 +4,7 @@
 forked from:
 https://github.com/erwald/midihum
 
-I added a simple GUI and compile to exe.
+I added a simple GUI and compiled into exe.
 
 ![](dialog.png)
 
