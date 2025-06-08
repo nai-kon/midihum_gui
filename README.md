@@ -11,7 +11,7 @@ I added a simple GUI and compiled into exe.
 ## Requirements
 
 * Python 3.11
-* uv 0.6.2
+* uv 0.7.12
 
 ## Installation
 `uv sync`
