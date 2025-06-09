@@ -34,7 +34,7 @@ if __name__ == "__main__":
     def pathsel():
         output_dir = sel_outdir_label.cget("text").lstrip(DISP_IDENT_OUTDIR)
         if output_dir == "":
-            tk.messagebox.showwarning(title="output folder error", message="Please select output folder firstly")
+            status_label.configure(text="Please select output folder firstly")
             return
 
         paths = tk.filedialog.askopenfilenames(filetypes=[("mid", "*.mid")])
