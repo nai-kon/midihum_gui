@@ -29,11 +29,11 @@ if __name__ == "__main__":
     def dirsel():
         output_dir = tk.filedialog.askdirectory(mustexist=True)
         if output_dir != "":
-            sel_outdir_label.configure(text=DISP_IDENT_OUTDIR + output_dir)
+            sel_outdir_btn.configure(text=DISP_IDENT_OUTDIR + output_dir)
 
     def pathsel():
-        output_dir = sel_outdir_label.cget("text").lstrip(DISP_IDENT_OUTDIR)
-        if output_dir == "":
+        output_dir = sel_outdir_btn.cget("text").lstrip(DISP_IDENT_OUTDIR)
+        if not os.path.exists(output_dir):
             status_label.configure(text="Please select output folder firstly")
             return
 
@@ -46,21 +46,20 @@ if __name__ == "__main__":
         sel_files_btn.configure(state=tk.DISABLED)
         threading.Thread(target=worker, args=(paths, output_dir)).start()
 
+    tk.set_default_color_theme("dark-blue")
     app = tk.CTk()
     app.title("midihum with GUI")
     app.resizable(False, False)
-    app.geometry("600x140")
+    app.geometry("600x180")
 
-    sel_outdir_btn = tk.CTkButton(app, text="Select output folder", command=dirsel)
-    sel_outdir_btn.pack()
-    sel_outdir_label = tk.CTkLabel(app, text=DISP_IDENT_OUTDIR)
-    sel_outdir_label.pack()
-    sel_files_btn = tk.CTkButton(app, text="Select input midi files", command=pathsel)
-    sel_files_btn.pack()
-    status_label = tk.CTkLabel(app, text="")
-    status_label.pack()
-    prog_bar = tk.CTkProgressBar(app, width=550)
+    sel_outdir_btn = tk.CTkButton(app, text="Select output folder", fg_color="#343638", border_color="#565B5E", border_width=2, command=dirsel, anchor="w")
+    sel_outdir_btn.pack(padx=20, pady=10, fill="x")
+    sel_files_btn = tk.CTkButton(app, text="Select input midi files", fg_color="#343638", border_color="#565B5E", border_width=2, command=pathsel, anchor="w")
+    sel_files_btn.pack(padx=20, pady=10, fill="x")
+    prog_bar = tk.CTkProgressBar(app, mode="determinate")
     prog_bar.set(0)
-    prog_bar.pack()
+    prog_bar.pack(padx=20, pady=10, fill="x")
+    status_label = tk.CTkLabel(app, text="Ready", anchor="w")
+    status_label.pack(padx=20, pady=10, fill="x")
 
     app.mainloop()
