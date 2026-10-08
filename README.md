@@ -6,7 +6,7 @@ https://github.com/erwald/midihum
 
 I added a simple GUI and compiled into exe.
 
-![](dialog.png)
+![](assets/dialog.png)
 
 # Usage
 

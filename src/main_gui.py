@@ -59,7 +59,7 @@ if __name__ == "__main__":
     prog_bar = tk.CTkProgressBar(app, mode="determinate")
     prog_bar.set(0)
     prog_bar.pack(padx=20, pady=10, fill="x")
-    status_label = tk.CTkLabel(app, text="Ready", anchor="w")
+    status_label = tk.CTkLabel(app, text="Select output folder and input files", anchor="w")
     status_label.pack(padx=20, pady=10, fill="x")
 
     app.mainloop()
