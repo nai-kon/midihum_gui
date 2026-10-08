@@ -1,6 +1,6 @@
 [project]
 name = "midihum-gui"
-version = "1.1.0"
+version = "1.2.0"
 description = "midihum with simple GUI"
 readme = "README.md"
 requires-python = "~=3.11"
